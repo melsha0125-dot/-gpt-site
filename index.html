@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>团圆狗狗家｜GPT会员自助下单</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">团</div>
+      <div><b>团圆狗狗家制作</b><span>安全可靠 · 专做GPT会员</span></div>
+    </div>
+    <a class="mini-btn" href="#notice">须知</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">24小时自助下单 · 微信/支付宝支持</div>
+      <h1>樱花季 GPT Plus 会员服务</h1>
+      <p>下单前请先阅读须知。直充、续费、新号均可咨询，遇到支付问题请联系人工客服 QQ：2705249367。</p>
+      <a class="consult" href="http://wpa.qq.com/msgrd?v=3&uin=2705249367&site=qq&menu=yes">咨询</a>
+      <div class="hero-card">
+        <span>安全可靠</span><span>专做GPT会员</span><span>自助下单</span>
+      </div>
+    </section>
+
+    <section class="notice" id="notice">
+      <h2>下单须知 · 必看</h2>
+      <p><b>24小时自助下单，下单后务必添加 QQ：2705249367，推荐加 QQ 联系。</b></p>
+      <p>无论手机还是电脑都能完成自助下单。如遇支付问题，请及时联系客服 QQ：2705249367。</p>
+      <div class="notice-grid">
+        <div>
+          <h3>一、可充值账号</h3>
+          <p>1. 老号，客户自己的号</p>
+          <p>2. 新号，新创建的号</p>
+          <p>3. Plus 已过期，需要续费的号</p>
+          <p class="warn">注意：不建议用域名邮箱操作。</p>
+        </div>
+        <div>
+          <h3>二、操作流程</h3>
+          <p>请确保 GPT 在个人账号里。如果在团队空间，请先切换到个人账号再操作。</p>
+          <p>付款后添加 QQ，发送付款截图和账号信息，按客服指引完成。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="products">
+      <h2>GPT 会员</h2>
+      <div class="product-list">
+        <article class="product">
+          <div class="tag">有质保</div>
+          <h3>GPT Plus 直充一个月</h3>
+          <p>适合自己的账号续费或新号开通。</p>
+          <div class="price">¥99</div>
+          <button data-pay="plus99">支付</button>
+        </article>
+        <article class="product featured">
+          <div class="tag">成品号</div>
+          <h3>GPT Plus 成品号一个月</h3>
+          <p>适合不想自己注册、希望直接使用的用户。</p>
+          <div class="price">¥149</div>
+          <button data-pay="account149">支付</button>
+        </article>
+        <article class="product muted">
+          <div class="tag">Apple ID</div>
+          <h3>苹果 ID</h3>
+          <p>苹果账号相关服务，购买前请先咨询客服确认。</p>
+          <div class="price">咨询价</div>
+          <a class="pay-link" href="http://wpa.qq.com/msgrd?v=3&uin=2705249367&site=qq&menu=yes">咨询</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="payModal" aria-hidden="true">
+    <div class="modal-box">
+      <button class="close" id="closeModal">×</button>
+      <h2 id="modalTitle">支付宝支付</h2>
+      <p class="modal-tip">支付前请确认已阅读须知。付款后添加 QQ：2705249367。</p>
+      <img id="payImg" alt="支付宝收款码" />
+      <p class="modal-bottom">保存图片或截图扫码支付，支付后联系人工客服。</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
