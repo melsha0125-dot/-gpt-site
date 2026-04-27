@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>后台｜订单管理</title>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f7f2ea;color:#282529}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 18px}
+.card{background:rgba(255,255,255,.76);border:1px solid rgba(80,64,62,.14);border-radius:24px;padding:20px;margin:16px 0;box-shadow:0 22px 70px rgba(60,45,45,.10)}
+h1{font-size:34px;margin:0 0 8px}p,li{line-height:1.8;color:#625b61}
+input,select,button{font-family:inherit}input{height:42px;border:1px solid #ddd;border-radius:12px;padding:0 12px}
+button{border:0;border-radius:12px;background:#242228;color:#fff;padding:11px 16px;cursor:pointer}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.order{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:14px;align-items:start;border-top:1px solid rgba(80,64,62,.12);padding:16px 0}
+.order:first-child{border-top:0}
+.meta b{display:block;margin-bottom:6px}.muted{color:#746c72;font-size:13px}
+.status{font-weight:800;color:#8e3644}
+img.shot{max-width:180px;max-height:180px;border-radius:14px;border:1px solid #ddd;background:#fff;cursor:pointer}
+.hidden{display:none}
+.notice{color:#8e3644;font-weight:700}
+@media(max-width:800px){.order{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>订单后台</h1>
+<p>这里可以查看客户提交的订单和付款截图，并修改状态。别把这个地址发给客户，人类会乱点，历史已经证明了。</p>
+<div class="card" id="loginBox">
+  <h2>后台密码</h2>
+  <div class="toolbar"><input id="pwd" type="password" placeholder="输入后台密码"><button onclick="login()">进入后台</button></div>
+  <p class="muted">默认密码：mel125admin（可在 admin.html 顶部脚本里改）</p>
+</div>
+<div id="adminPanel" class="hidden">
+<div class="card">
+  <div class="toolbar">
+    <button onclick="loadOrders()">刷新订单</button>
+    <a href="https://supabase.com/dashboard/project/lqwbqmbkuepadgumsivj/editor" target="_blank"><button>打开 Supabase 商品表</button></a>
+  </div>
+  <p class="notice">状态建议：待核对 → 处理中 → 已完成。</p>
+</div>
+<div class="card"><h2>订单列表</h2><div id="orders">正在读取...</div></div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const ADMIN_PASSWORD="mel125admin";
+const db=window.supabase.createClient("https://lqwbqmbkuepadgumsivj.supabase.co","sb_publishable_bn_u6VzCJLy58sqeOGVHZg_WKiIh3UE");
+function login(){
+ if(document.getElementById('pwd').value!==ADMIN_PASSWORD){alert('密码不对');return;}
+ localStorage.setItem('admin_ok','1');document.getElementById('loginBox').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden');loadOrders();
+}
+if(localStorage.getItem('admin_ok')==='1'){document.getElementById('loginBox').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden');loadOrders();}
+async function loadOrders(){
+ const box=document.getElementById('orders');box.innerHTML='正在读取...';
+ const {data,error}=await db.from('orders').select('*').order('created_at',{ascending:false}).limit(100);
+ if(error){box.innerHTML='读取失败：'+error.message;return;}
+ if(!data||!data.length){box.innerHTML='暂无订单';return;}
+ box.innerHTML=data.map(o=>`
+ <div class="order">
+  <div class="meta"><b>${o.order_no}</b><div>${o.product_name}｜¥${o.amount}</div><div class="muted">联系方式：${o.contact||''}</div><div class="muted">时间：${new Date(o.created_at).toLocaleString()}</div></div>
+  <div><span class="status">${o.status}</span><br><select onchange="updateStatus('${o.id}',this.value)"><option ${o.status==='待核对'?'selected':''}>待核对</option><option ${o.status==='处理中'?'selected':''}>处理中</option><option ${o.status==='已完成'?'selected':''}>已完成</option></select></div>
+  <div>${o.screenshot_data?`<img class="shot" src="${o.screenshot_data}" onclick="window.open(this.src)">`:'无截图'}</div>
+  <div><button onclick="copyText('${o.order_no}')">复制订单号</button></div>
+ </div>`).join('');
+}
+async function updateStatus(id,status){
+ const {error}=await db.from('orders').update({status}).eq('id',id);
+ if(error){alert('更新失败：'+error.message);return;}
+ loadOrders();
+}
+function copyText(t){navigator.clipboard.writeText(t);alert('已复制：'+t)}
+</script>
+</body>
+</html>
